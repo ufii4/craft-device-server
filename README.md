@@ -24,11 +24,12 @@ By default the runtime uses:
 
 - `~/.craft-agent/device-server`
 
-On this machine that resolves to:
-
-- `/Users/ufi/.craft-agent/device-server`
-
 The package seeds missing runtime files into that directory on startup.
+
+Overrides:
+
+- `CRAFT_CONFIG_DIR` changes the parent Craft config root used by the default runtime directory
+- `CRAFT_DEVICE_SERVER_CONFIG_DIR` overrides the runtime config directory entirely
 
 ## Runtime layout
 
