@@ -1,0 +1,45 @@
+{
+  "id": "troll",
+  "name": "Troll",
+  "enabled": true,
+  "description": "Generate a comment-style reply from curated history context.",
+  "handler": {
+    "command": "bun",
+    "args": [
+      "./handler.mjs"
+    ],
+    "timeoutMs": 120000
+  },
+  "operations": {
+    "run": {
+      "definition": "./operations/run.definition.mjs",
+      "command": {
+        "argv": [
+          "run"
+        ]
+      }
+    }
+  },
+  "transports": {
+    "mcp": {
+      "enabled": true,
+      "toolName": "troll",
+      "description": "Generate a curated-history comment reply from a prompt.",
+      "dispatch": {
+        "kind": "single-operation",
+        "operation": "run"
+      }
+    },
+    "http": {
+      "enabled": true,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/troll",
+          "operation": "run",
+          "auth": "bearer"
+        }
+      ]
+    }
+  }
+}

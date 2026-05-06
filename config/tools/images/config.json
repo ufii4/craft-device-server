@@ -1,0 +1,63 @@
+{
+  "id": "images",
+  "name": "Images",
+  "enabled": true,
+  "description": "Search stock images or edit local images.",
+  "handler": {
+    "command": "bun",
+    "args": [
+      "./handler.mjs"
+    ],
+    "timeoutMs": 30000
+  },
+  "operations": {
+    "search": {
+      "definition": "./operations/search.definition.mjs",
+      "command": {
+        "argv": [
+          "search"
+        ]
+      }
+    },
+    "edit": {
+      "definition": "./operations/edit.definition.mjs",
+      "command": {
+        "argv": [
+          "edit"
+        ]
+      }
+    }
+  },
+  "transports": {
+    "mcp": {
+      "enabled": true,
+      "toolName": "images",
+      "description": "Search stock images or edit local images using provider-backed methods.",
+      "dispatch": {
+        "kind": "field",
+        "field": "method",
+        "operations": {
+          "search": "search",
+          "edit": "edit"
+        }
+      }
+    },
+    "http": {
+      "enabled": true,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/images/search",
+          "operation": "search",
+          "auth": "bearer"
+        },
+        {
+          "method": "POST",
+          "path": "/images/edit",
+          "operation": "edit",
+          "auth": "bearer"
+        }
+      ]
+    }
+  }
+}

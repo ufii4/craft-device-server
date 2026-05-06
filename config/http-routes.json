@@ -1,0 +1,17 @@
+{
+  "routes": [
+    {
+      "id": "notify",
+      "method": "POST",
+      "path": "/notify",
+      "auth": "bearer",
+      "handler": {
+        "command": "bun",
+        "args": [
+          "./handlers/notify-handler.mjs"
+        ],
+        "timeoutMs": 10000
+      }
+    }
+  ]
+}

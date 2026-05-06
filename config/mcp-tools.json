@@ -1,0 +1,161 @@
+{
+  "tools": [
+    {
+      "name": "images",
+      "description": "Search stock images or edit local images using provider-backed method dispatch.",
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "method": {
+            "type": "string",
+            "enum": ["search", "edit"],
+            "description": "Which images method to call"
+          },
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Search query"
+          },
+          "provider": {
+            "type": "string",
+            "enum": ["pexels"],
+            "default": "pexels",
+            "description": "Image provider to query"
+          },
+          "orientation": {
+            "type": "string",
+            "enum": ["landscape", "portrait", "square"],
+            "description": "Preferred photo orientation"
+          },
+          "size": {
+            "type": "string",
+            "description": "Explicit output size like 1536x1024 or provider-defined search size"
+          },
+          "color": {
+            "type": "string",
+            "description": "Preferred dominant color for search"
+          },
+          "locale": {
+            "type": "string",
+            "description": "Search locale"
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Search result page number"
+          },
+          "perPage": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 80,
+            "description": "Search results per page"
+          },
+          "input": {
+            "type": "string",
+            "description": "Absolute path to the primary input image"
+          },
+          "prompt": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Prompt describing the desired edit"
+          },
+          "references": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Optional absolute paths to reference images"
+          },
+          "mask": {
+            "type": "string",
+            "description": "Optional absolute path to a mask image"
+          },
+          "output": {
+            "type": "string",
+            "description": "Optional absolute output path or template. Use {index} for multiple results."
+          },
+          "model": {
+            "type": "string",
+            "default": "gpt-image-2",
+            "description": "Image model name"
+          },
+          "n": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10,
+            "default": 1,
+            "description": "Number of edited outputs to request"
+          },
+          "width": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Requested output width in pixels"
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Requested output height in pixels"
+          },
+          "aspectRatio": {
+            "type": "string",
+            "default": "auto",
+            "description": "Aspect ratio preset or explicit ratio, for example 2:3 or 16:9"
+          },
+          "scale": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "default": 1,
+            "description": "Relative scale factor used for derived sizing"
+          },
+          "quality": {
+            "type": "string",
+            "enum": ["auto", "low", "medium", "high"],
+            "default": "auto",
+            "description": "Requested output quality"
+          },
+          "format": {
+            "type": "string",
+            "enum": ["png", "jpeg", "webp"],
+            "default": "png",
+            "description": "Output image format"
+          },
+          "compression": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Compression level for jpeg or webp output"
+          },
+          "background": {
+            "type": "string",
+            "enum": ["auto", "opaque", "transparent"],
+            "default": "auto",
+            "description": "Requested background handling"
+          },
+          "moderation": {
+            "type": "string",
+            "enum": ["auto", "low"],
+            "default": "auto",
+            "description": "Requested moderation setting"
+          },
+          "inputFidelity": {
+            "type": "string",
+            "enum": ["low", "high"],
+            "description": "Optional input fidelity hint"
+          },
+          "user": {
+            "type": "string",
+            "description": "Optional end-user identifier passed to OpenAI"
+          }
+        },
+        "required": ["method"]
+      },
+      "handler": {
+        "command": "bun",
+        "args": [
+          "./handlers/images-handler.mjs"
+        ],
+        "timeoutMs": 30000
+      }
+    }
+  ]
+}

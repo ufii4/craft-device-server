@@ -1,0 +1,39 @@
+{
+  "id": "notify",
+  "name": "Notify",
+  "enabled": true,
+  "description": "Show a local desktop notification.",
+  "handler": {
+    "command": "bun",
+    "args": [
+      "./handler.mjs"
+    ],
+    "timeoutMs": 10000
+  },
+  "operations": {
+    "send": {
+      "definition": "./operations/send.definition.mjs",
+      "command": {
+        "argv": [
+          "send"
+        ]
+      }
+    }
+  },
+  "transports": {
+    "mcp": {
+      "enabled": false
+    },
+    "http": {
+      "enabled": true,
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/notify",
+          "operation": "send",
+          "auth": "bearer"
+        }
+      ]
+    }
+  }
+}
