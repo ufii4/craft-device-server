@@ -301,6 +301,11 @@ describe('runtime config loading', () => {
     expect(JSON.stringify(tool.inputSchema)).toContain('method')
     expect(JSON.stringify(tool.inputSchema)).toContain('query')
     expect(JSON.stringify(tool.inputSchema)).toContain('prompt')
+    expect(tool.inputSchema).toMatchObject({
+      type: 'object',
+      required: ['method'],
+    })
+    expect('oneOf' in tool.inputSchema).toBe(false)
   })
 
   it('loads mixed tool-folder and legacy config with tool-folder precedence on conflicts', async () => {

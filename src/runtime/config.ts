@@ -216,7 +216,7 @@ function buildMcpInputSchema(dispatch: McpDispatchConfig, tool: ToolRuntimeConfi
       description: `Operation selector for ${tool.name}`,
     },
   }
-  const oneOf: Record<string, unknown>[] = []
+  const operationRequirements: string[] = []
 
   for (const [dispatchValue, operationId] of Object.entries(dispatch.operations)) {
     const operation = tool.operations[operationId]
@@ -232,17 +232,12 @@ function buildMcpInputSchema(dispatch: McpDispatchConfig, tool: ToolRuntimeConfi
     }
 
     const required = Array.isArray(objectSchema.required)
-      ? [...objectSchema.required.filter((value): value is string => typeof value === 'string'), dispatch.field]
-      : [dispatch.field]
+      ? objectSchema.required.filter((value): value is string => typeof value === 'string')
+      : []
 
-    oneOf.push({
-      ...objectSchema,
-      properties: {
-        ...(properties && typeof properties === 'object' && !Array.isArray(properties) ? properties : {}),
-        [dispatch.field]: { const: dispatchValue },
-      },
-      required,
-    })
+    if (required.length > 0) {
+      operationRequirements.push(`${dispatch.field}=${dispatchValue} requires: ${required.join(', ')}`)
+    }
   }
 
   return {
@@ -250,7 +245,14 @@ function buildMcpInputSchema(dispatch: McpDispatchConfig, tool: ToolRuntimeConfi
     additionalProperties: false,
     properties: combinedProperties,
     required: [dispatch.field],
-    ...(oneOf.length > 0 ? { oneOf } : {}),
+    ...(operationRequirements.length > 0
+      ? {
+          description: [
+            `Select a ${tool.name} operation with ${dispatch.field}.`,
+            ...operationRequirements,
+          ].join(' '),
+        }
+      : {}),
   }
 }
 
